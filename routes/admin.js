@@ -1,15 +1,11 @@
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
+const PATH = require('path');
+
+const ROOT_DIR = require('../util/path');
 
 ROUTER.use('/add-product', (req, res, next) => {
-  res.send(
-    `
-    <form action="/admin/add-product" method="POST">
-        <input type="text" name="title">
-        <button type="submit">Add Product</button>
-    </form>
-    `
-  );
+  res.sendFile(PATH.join(ROOT_DIR, 'views', 'add-product.html'));
 });
 
 ROUTER.post('/add-product', (req, res, next) => {
