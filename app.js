@@ -1,5 +1,6 @@
 const EXPRESS = require('express');
 const BODY_PARSER = require('body-parser');
+const PATH = require('path');
 
 const APP = EXPRESS();
 
@@ -13,7 +14,7 @@ APP.use(SHOP_ROUTES);
 
 APP.use((req, res, next) => {
   console.log('page not found');
-  res.status(404).send('<h1>Page not Foudn</h1>');
+  res.status(404).sendFile(PATH.join(__dirname, 'views', '404.html'));
 });
 
-APP.listen(4000);
+APP.listen(3000);
