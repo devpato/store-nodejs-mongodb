@@ -25,14 +25,17 @@ const SERVER = HTTP.createServer((req, res) => {
     req.on('data', chunk => {
       BODY.push(chunk);
     });
-    req.on('end', () => {
+    return req.on('end', () => {
       const PARSED_BODY = Buffer.concat(BODY).toString();
       const MESSAGE = PARSED_BODY.split('=')[1];
-      FS.writeFileSync('message.txt', MESSAGE);
+      FS.writeFile('message.txt', MESSAGE, error => {
+        if (!error) {
+          res.statusCode = 302;
+          res.setHeader('Location', '/');
+          return res.end();
+        }
+      });
     });
-    res.statusCode = 302;
-    res.setHeader('Location', '/');
-    return res.end();
   }
   res.write(
     `<html>
