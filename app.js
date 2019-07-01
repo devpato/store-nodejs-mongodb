@@ -11,7 +11,7 @@ APP.use(BODY_PARSER.urlencoded({ extended: false }));
 APP.use(EXPRESS.static(PATH.join(__dirname, 'public')));
 
 APP.use('/admin', ADMIN_ROUTES);
-APP.use(SHOP_ROUTES);
+APP.use('/shop', SHOP_ROUTES);
 
 APP.use((req, res, next) => {
   console.log('page not found');
