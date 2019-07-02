@@ -1,21 +1,21 @@
-const EXPRESS = require('express');
-const BODY_PARSER = require('body-parser');
-const PATH = require('path');
+const path = require('path');
 
-const APP = EXPRESS();
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const ADMIN_ROUTES = require('./routes/admin');
-const SHOP_ROUTES = require('./routes/shop');
+const app = express();
 
-APP.use(BODY_PARSER.urlencoded({ extended: false }));
-APP.use(EXPRESS.static(PATH.join(__dirname, 'public')));
+const adminData = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-APP.use('/admin', ADMIN_ROUTES);
-APP.use('/shop', SHOP_ROUTES);
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
 
-APP.use((req, res, next) => {
-  console.log('page not found');
-  res.status(404).sendFile(PATH.join(__dirname, 'views', '404.html'));
+app.use('/admin', adminData.routes);
+app.use(shopRoutes);
+
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
-APP.listen(3000);
+app.listen(3000);
