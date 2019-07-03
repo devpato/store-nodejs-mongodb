@@ -4,9 +4,7 @@ exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/add-product',
-    formsCSS: true,
-    productCSS: true,
-    activeAddProduct: true
+    editing: false
   });
 };
 
@@ -26,14 +24,21 @@ exports.getEditProduct = (req, res, next) => {
   if (!editMode) {
     return res.redirect('/');
   }
+  const prodId = req.params.productId;
+  console.log(prodId);
+  Product.findById(prodId, product => {
+    console.log(product);
+    if (!product) {
+      console.log('achis');
+      return res.redirect('/');
+    }
 
-  res.render('admin/edit-product', {
-    pageTitle: 'Edit Product',
-    path: '/admin/edit-product',
-    formsCSS: true,
-    productCSS: true,
-    activeAddProduct: true,
-    editing: editMode
+    res.render('admin/edit-product', {
+      pageTitle: 'Edit Product',
+      path: '/admin/edit-product',
+      editing: editMode,
+      product: product
+    });
   });
 };
 
@@ -46,3 +51,4 @@ exports.getProducts = (req, res, next) => {
     });
   });
 };
+//http://localhost:3000/admin/edit-product/0.7945253369798089?edit=true
