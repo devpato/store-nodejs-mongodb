@@ -3,7 +3,7 @@ const sequelize = require('../util/db');
 
 const CartItem = sequelize.define('cart', {
   id: {
-    type: Sequelize.STRING,
+    type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
