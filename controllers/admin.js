@@ -62,4 +62,10 @@ exports.postEditProduct = (req, res, next) => {
   product.save();
   res.redirect('/admin/products');
 };
+
+exports.postDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.deleteById(prodId);
+  res.redirect('/admin/products');
+};
 //http://localhost:3000/admin/edit-product/0.7945253369798089?edit=true
