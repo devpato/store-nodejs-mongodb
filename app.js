@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const errorController = require('./controllers/error.js');
 const app = express();
 const sequelize = require('./util/db');
+const Product = require('./models/product');
+const User = require('./models/user');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -19,8 +21,11 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+
 sequelize
-  .sync()
+  .sync({ force: true })
   .then(() => {
     app.listen(3000);
   })
