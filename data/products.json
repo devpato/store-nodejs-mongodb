@@ -1,9 +1,1 @@
-[
-  {
-    "title": "test",
-    "imageUrl": "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png",
-    "description": "testing",
-    "price": "19",
-    "id": "0.7945253369798089"
-  }
-]
+[{"id":"0.2659271081860506","title":"test1","imageUrl":"https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png\"","description":"testing","price":"20"}]
