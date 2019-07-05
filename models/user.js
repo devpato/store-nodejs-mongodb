@@ -1,16 +1,23 @@
-const Sequelize = require('sequelize');
+const moongose = require('mongoose');
+const Schema = moongose.Schema;
 
-const sequelize = require('../util/database');
-
-const User = sequelize.define('user', {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: true
   },
-  name: Sequelize.STRING,
-  email: Sequelize.STRING
+  email: {
+    type: String,
+    required: true
+  },
+  cart: {
+    items: [
+      {
+        product: { type: Schema.Types.ObjectId, required: true },
+        quantity: { type: Number, required: true }
+      }
+    ]
+  }
 });
 
-module.exports = User;
+module.exports = moongose.model('User', userSchema);
