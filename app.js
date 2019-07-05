@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
 const Product = require('./models/product');
-// const User = require('./models/user');
+const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
 const Order = require('./models/order');
@@ -22,14 +22,14 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//   User.findByPk(1)
-//     .then(user => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById('5d1fcba9b555f618613e0918')
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -42,6 +42,19 @@ moongose
     { useNewUrlParser: true }
   )
   .then(() => {
+    User.findOne().then(user => {
+      if (!user) {
+        console.log('NEW USER CREATED');
+        const user = new User({
+          name: 'Pato',
+          email: 'pato@test.com',
+          cart: {
+            items: []
+          }
+        });
+        user.save();
+      }
+    });
     console.log('CONNECTED TO DB');
     app.listen(3000);
     console.log('LISTENING PORT 3000');
