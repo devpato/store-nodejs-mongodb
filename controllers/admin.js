@@ -83,8 +83,6 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
-    .select('title price -_id')
-    .populate('userId', 'name')
     .then(products => {
       res.render('admin/products', {
         prods: products,
@@ -95,6 +93,8 @@ exports.getProducts = (req, res, next) => {
     .catch(err => {
       console.log(err);
     });
+  //  .select('title price -_id') -- especific fields
+  //   .populate('userId', 'name') -- show only name of user , if only user will show all fields
 };
 
 exports.postDeleteProduct = (req, res, next) => {
