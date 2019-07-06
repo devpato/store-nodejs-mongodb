@@ -17,7 +17,8 @@ exports.postAddProduct = (req, res, next) => {
     title: title,
     imageUrl: imageUrl,
     price: price,
-    description: description
+    description: description,
+    userId: req.user._id
   });
 
   product
@@ -27,7 +28,7 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch(err => {
-      console.log(errr);
+      console.log(err);
     });
 };
 
