@@ -13,7 +13,11 @@ const userSchema = new Schema({
   cart: {
     items: [
       {
-        product: { type: Schema.Types.ObjectId, required: true },
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true
+        },
         quantity: { type: Number, required: true }
       }
     ]
