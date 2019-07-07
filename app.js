@@ -1,5 +1,5 @@
 const path = require('path');
-
+const session = require('express-session');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -18,6 +18,7 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use({ secret: 'my_secret', resave: false, saveUninitialized: false });
 
 app.use((req, res, next) => {
   User.findById('5d1fcc9b0ae04918c4e64479')
@@ -31,14 +32,14 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
-
 app.use(errorController.get404);
+
 mongoose
   .connect(
     'mongodb+srv://admin:admin@shop-heg91.mongodb.net/shop?retryWrites=true&w=majority',
     { useNewUrlParser: true }
   )
-  .then(result => {
+  .then(() => {
     User.findOne().then(user => {
       if (!user) {
         const user = new User({
