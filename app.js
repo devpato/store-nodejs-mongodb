@@ -1,16 +1,20 @@
 const path = require('path');
-const session = require('express-session');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+
 const errorController = require('./controllers/error');
 const User = require('./models/user');
+
 const MONGODB_URI = 'mongodb+srv://admin:admin@shop-heg91.mongodb.net/shop';
+
 const app = express();
 const store = new MongoDBStore({
   uri: MONGODB_URI,
-  collection: 'session'
+  collection: 'sessions'
 });
 
 app.set('view engine', 'ejs');
@@ -24,18 +28,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
-    secret: 'my_secret',
+    secret: 'my secret',
     resave: false,
     saveUninitialized: false,
     store: store
   })
 );
 
+//review
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
-
   User.findById(req.session.user._id)
     .then(user => {
       req.user = user;
@@ -47,13 +51,15 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
+
 app.use(errorController.get404);
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
-  .then(() => {
+  .then(result => {
     User.findOne().then(user => {
       if (!user) {
+        console.log('creating user ');
         const user = new User({
           name: 'Pato',
           email: 'pato@test.com',
@@ -69,5 +75,4 @@ mongoose
   .catch(err => {
     console.log(err);
   });
-
-//222,221,218
+//222,221,218,242
