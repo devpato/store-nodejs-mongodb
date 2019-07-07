@@ -1,15 +1,11 @@
 const path = require('path');
-const moongose = require('mongoose');
+
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
-const Product = require('./models/product');
 const User = require('./models/user');
-const Cart = require('./models/cart');
-const CartItem = require('./models/cart-item');
-const Order = require('./models/order');
-const OrderItem = require('./models/order-item');
 
 const app = express();
 
@@ -18,6 +14,7 @@ app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,7 +23,6 @@ app.use((req, res, next) => {
   User.findById('5d1fcc9b0ae04918c4e64479')
     .then(user => {
       req.user = user;
-      console.log(req.user);
       next();
     })
     .catch(err => console.log(err));
@@ -34,18 +30,17 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(errorController.get404);
-
-moongose
+mongoose
   .connect(
     'mongodb+srv://admin:admin@shop-heg91.mongodb.net/shop?retryWrites=true&w=majority',
     { useNewUrlParser: true }
   )
-  .then(() => {
+  .then(result => {
     User.findOne().then(user => {
       if (!user) {
-        console.log('NEW USER CREATED');
         const user = new User({
           name: 'Pato',
           email: 'pato@test.com',
@@ -56,9 +51,7 @@ moongose
         user.save();
       }
     });
-    console.log('CONNECTED TO DB');
     app.listen(3000);
-    console.log('LISTENING PORT 3000');
   })
   .catch(err => {
     console.log(err);
